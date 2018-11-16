@@ -13,7 +13,7 @@
                     sizeRange: [12, 50],
                     rotationRange: [-90, 90],
                     shape: 'pentagon',
-                    width: 600,
+                    width: 400,
                     height: 400,
                     drawOutOfBound: true,
                     textStyle: {

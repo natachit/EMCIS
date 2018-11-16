@@ -7,7 +7,8 @@ $.getJSON('recgraph.json', function (json) {
     myChart2.hideLoading();
     myChart2.setOption(option = {
         title: {
-            text: 'Received by'
+            text: 'Received by',
+            left: '5%'
         },
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
@@ -66,33 +67,51 @@ if (option && typeof option === "object") {
 function change_rc(id){
               //console.log(data[idd]);
                $.getJSON('./recgraph.json', function (json) {
-              myChart2.setOption(option = {series:[{data: json[3].nodes.map(function (node) {
-                    return {
-                        x: node.x,
-                        y: node.y,
-                        id: node.id,
-                        name: node.label,
-                        symbolSize: node.size,
-                        itemStyle: {
-                            normal: {
-                                color: node.color
-                            }
-                        }
-                    };
-                }),
-                edges: json[3].edges.map(function (edge) {
-                    return {
-                        source: edge.by,
-                        target: edge.fromm,
+                   console.log(json[id])
+              myChart2.setOption(option = {
+                series : [
+                    {
+                        type: 'graph',
+                        edgeSymbol: ['', 'arrow'],
+        
+                        data: json[id].nodes.map(function (node) {
+                            return {
+                                x: node.x,
+                                y: node.y,
+                                id: node.id,
+                                name: node.label,
+                                symbolSize: node.size,
+                                itemStyle: {
+                                    normal: {
+                                        color: node.color
+                                    }
+                                }
+                            };
+                        }),
+                        edges: json[id].edges.map(function (edge) {
+                            return {
+                                source: edge.by,
+                                target: edge.fromm,
+                                label: {
+                        },
+                             lineStyle: {
+                                  normal: {
+                                      width: 1,
+                                      curveness: 0.3,
+                                      opacity: 1
+                                  }
+                                }      
+                            };
+                        }),
                         label: {
-                },
-                     lineStyle: {
-                          normal: {
-                              width: 1,
-                              curveness: 0.3,
-                              opacity: 1
-                          }
-                        }      
-                    };
-                })}]});
+                            emphasis: {
+                                position: 'bottom',
+                                show: true
+                            }
+                        },
+                        roam: true,
+                        focusNodeAdjacency: true,
+                        
+                    }
+                ]});
             })}
