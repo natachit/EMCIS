@@ -9,6 +9,7 @@
                 series: [ {
                     type: 'wordCloud',
                     gridSize: 2,
+                    //sizeRange: [12, 50],
                     sizeRange: [12, 50],
                     rotationRange: [-90, 90],
                     shape: 'pentagon',
