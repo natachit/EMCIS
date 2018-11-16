@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+  <style>
+* {
+    box-sizing: border-box;
+}
+
+/* Create two unequal columns that floats next to each other */
+.column {
+    float: left;
+    padding: 10px;
+    height: 690px; /* Should be removed. Only for demonstration */
+}
+
+.left {
+  width: 55%;
+}
+
+.right {
+  width: 38%;
+}
+
+div.header {
+    text-align: center;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+</style>
+   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+       <meta charset="utf-8">
+   </head>
+     <body style="height: 100%; margin: 0">   
+        <div class="header"><h2 class="center">E-mail Crime Investigation System</h2></div>
+      <div class="row">
+       <div class="column left" ><div id="container" style="height: 100%;width:100%"></div></div>
+       <div class="column right">
+        <div id='main' style="height: 58%;width: 100%"></div>
+         <div id="container2" style="height: 60%;width:100%"></div>
+      </div>
+      </div>
+
+       <script type="text/javascript" src="./js/echarts.min.js"></script>
+<script type="text/javascript" src="./js/echarts-gl.min.js"></script>
+<script type="text/javascript" src="./js/ecStat.min.js"></script>
+<script type="text/javascript" src="./js/dataTool.min.js"></script>
+<script type="text/javascript" src="./js/china.js"></script>
+<script type="text/javascript" src="./js/world.js"></script>
+<script type="text/javascript" src="./js/bmap.min.js"></script>
+<script type="text/javascript" src="./js/simplex.js"></script>
+       <!-- <script src='https://cdn.bootcss.com/echarts/3.7.0/echarts.simple.js'></script> -->
+       <script src='./echarts-wordcloud.js'></script>
+       <script src="./js/jquery.min.js"></script>
+       <script src="./wc.js"></script>
+        <script src="./receive.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+myChart.showLoading();
+$.getJSON('mail2.json', function (json) {
+    console.log(json.edge);
+    myChart.hideLoading();
+    myChart.setOption(option = {
+        title: {
+            text: 'EMCIS',
+            position: 'center'
+        },
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series : [
+            {
+                type: 'graph',
+                edgeSymbol: ['', 'arrow'],
+                layout: 'force',
+                force: {
+                  repulsion: 50000,
+                  initLayout: 'circular'
+                },
+                data: json.nodes.map(function (node) {
+                    return {
+                        x: node.x,
+                        y: node.y,
+                        id: node.id,
+                        name: node.label,
+                        symbolSize: node.size,
+                        itemStyle: {
+                            normal: {
+                                color: node.color
+                            }
+                        }
+                    };
+                }),
+                edges: json.edges.map(function (edge) {
+                    return {
+                        source: edge.From,
+                        target: edge.To,
+                        id: edge.id,
+                        label: {
+                },
+                     lineStyle: {
+                          normal: {
+                              width: 1,
+                              curveness: 0.3,
+                              opacity: 1
+                          }
+                        }      
+                    };
+                }),
+                label: {
+                    position: ['50%','100%'],
+                    show: true,
+                    emphasis: {
+                        position: ['50%','50%'],
+                        show: true,
+                        textBorderColor: 'white'
+                    }
+                },
+                roam: true,
+                focusNodeAdjacency: true,
+                
+            }
+        ]
+    }, true);
+});;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+
+   myChart.on('click', function (param){
+                    //console.log(param.data.id)
+                    var idd = param.data.id;
+                    sel_wc(idd);
+                    sel_rc(idd);               
+                });
+   //myChart.on('click',eConsole);
+   
+   function sel_wc(id){
+   $.getScript("./wc.js").done(function() {
+    change_wc(id);
+
+    });
+ }
+   function sel_rc(id){
+   $.getScript("./receive.js").done(function() {
+    change_rc(id);
+
+    });
+
+   
+   }
+
+ </script>
+    <h4>text</h4>
+   </body>
+</html>
